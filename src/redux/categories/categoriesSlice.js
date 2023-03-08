@@ -8,7 +8,13 @@ const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    checkStatus: () => 'Under construction',
+    checkStatus: (state, action) => {
+      const newState = { ...state }; // make a copy of state object
+      newState.categories = action.payload === 'Under construction'
+        ? 'Under construction'
+        : state.categories;
+      return newState;
+    },
   },
 });
 
