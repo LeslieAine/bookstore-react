@@ -4,20 +4,20 @@ const initialState = {
   books: [
     {
       item_id: 'item1',
-      title: 'The Hunger Games',
-      author: 'Suzanne Collins',
+      title: 'The Great Gatsby',
+      author: 'John Smith',
       category: 'Fiction',
     },
     {
       item_id: 'item2',
-      title: 'Dune',
-      author: 'Frank Herbert',
+      title: 'Anna Karenina',
+      author: 'Leo Tolstoy',
       category: 'Fiction',
     },
     {
       item_id: 'item3',
-      title: 'Capital in the Twenty-First Century',
-      author: 'Suzanne Collins',
+      title: 'The Selfish Gene',
+      author: 'Richard Dawkins',
       category: 'Nonfiction',
     },
   ],
@@ -28,13 +28,18 @@ const booksSlice = createSlice({
   initialState,
   reducers: {
     addBook: (state, action) => {
-      state.books.push(action.payload);
+      const book = {
+        item_id: `item${state.books.length + 1}`,
+        title: action.payload.title,
+        author: action.payload.author,
+      };
+
+      state.books.push(book);
     },
-    removeBook: (state, action) => {
-      const newState = { ...state }; // make a copy of state object
-      newState.books = state.books.filter((book) => book.id !== action.payload);
-      return newState;
-    },
+    removeBook: (state, action) => ({
+      ...state,
+      books: state.books.filter((book) => book.item_id !== action.payload.id),
+    }),
   },
 });
 
