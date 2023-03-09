@@ -1,34 +1,54 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { addBook } from '../redux/books/booksSlice';
+
 import Book from './Book';
+import Button from './Button';
 import styles from '../styles/Books.module.css';
 
-const Books = () => (
-  <div className={styles.books}>
-    <ul className={styles.list}>
-      <li className={styles.item}>
-        <Book title="The Hunger Games" author="Suzanne Collins" />
-      </li>
-      <li className={styles.item}>
-        <Book title="Dune" author="Frank Herbert" />
-      </li>
-      <li className={styles.item}>
-        <Book title="Capital in the Twenty-First Century" author="Suzanne Collins" />
-      </li>
-    </ul>
-    <form className={styles.form}>
-      <input
-        type="text"
-        placeholder="Book title"
-        className={styles.input}
-      />
-      <input
-        type="text"
-        placeholder="Author"
-        className={styles.input}
-      />
-      <button type="submit" className={styles.button}>
-        Add Book
-      </button>
-    </form>
-  </div>
-);
+const Books = () => {
+  const { books } = useSelector((state) => state.books);
+  const dispatch = useDispatch();
+
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+
+  return (
+    <div className={styles.books}>
+      <ul className={styles.list}>
+        {books.map((book) => (
+          <li className={styles.item} key={book.item_id}>
+            <Book title={book.title} author={book.author} id={book.item_id} />
+          </li>
+        ))}
+      </ul>
+      <form className={styles.form}>
+        <input
+          type="text"
+          placeholder="Book title"
+          className={styles.input}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Author"
+          className={styles.input}
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+        />
+        <Button
+          type="button"
+          title="Add Book"
+          onClick={() => {
+            dispatch(addBook({ title, author }));
+            setAuthor('');
+            setTitle('');
+          }}
+        />
+      </form>
+    </div>
+  );
+};
+
 export default Books;
